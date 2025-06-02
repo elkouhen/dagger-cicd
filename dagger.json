@@ -1,0 +1,8 @@
+{
+  "name": "dagger-cicd",
+  "engineVersion": "v0.18.9",
+  "sdk": {
+    "source": "python"
+  },
+  "source": ".dagger"
+}
