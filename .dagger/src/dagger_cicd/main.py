@@ -17,7 +17,7 @@ class DaggerCicd:
     @function
     def build_image(self, source: dagger.Directory) -> dagger.Container:
 
-        return dag.container().from_("maven:latest")\
+        return dag.container().from_("maven:3.9.9-eclipse-temurin-17")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
                 .with_exec(["mvn", "spring-boot:build-image", "-DskipTests", f"-Dspring-boot.build-image.imageName=ttl.sh/dagger-demo"])
