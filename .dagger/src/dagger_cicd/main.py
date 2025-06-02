@@ -11,8 +11,7 @@ class DaggerCicd:
         return dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
-                .with_exec(["mvn", "clean", "install", "-DskipTests
-                            "])
+                .with_exec(["mvn", "clean", "install", "-DskipTests"])
 
     @function
     def start_db(self, source_sql: dagger.File) -> dagger.Service:
