@@ -20,7 +20,7 @@ class DaggerCicd:
         return dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
-                .with_exec(["mvn", "spring-boot:build-image", "-DskipTests"])
+                .with_exec(["mvn", "spring-boot:build-image", "-DskipTests", f"-Dspring-boot.build-image.imageName=ttl.sh/dagger-demo"])
                                 
     def start_db(self, source: dagger.Directory) -> dagger.Service:
 
