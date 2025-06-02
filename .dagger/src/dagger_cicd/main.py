@@ -13,7 +13,6 @@ class DaggerCicd:
                 .with_workdir("/src")\
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
 
-    @function
     def start_db(self, source_sql: dagger.File) -> dagger.Service:
 
         return dag.container()\
@@ -24,14 +23,23 @@ class DaggerCicd:
                 .with_mounted_file("/docker-entrypoint-initdb.d/init.sql", source_sql)\
                 .as_service()
 
-    @function
-    async def run(self, source: dagger.Directory, source_sql: dagger.File) -> str:
-
-        db_service : dagger.Service = self.start_db(source_sql)
-
-        return await (dag.container().from_("maven:latest")\
+    def start_app(self, db: dagger.Service,source: dagger.Directory, source_sql: dagger.File) -> dagger.Service:
+        
+        return dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
-                .with_service_binding("database", db_service)\
+                .with_service_binding("database", db)\
                 .with_exposed_port(8080)\
-                .with_exec(["mvn", "spring-boot:run"]).stdout())
+                .with_exec(["mvn", "spring-boot:run"])\
+                .as_service()
+                
+    @function
+    def run(self, source: dagger.Directory, source_sql: dagger.File) -> dagger.Container :
+        
+        db = self.start_db(source_sql)
+        app = self.start_app(db, source, source_sql)
+        
+        return dag.container().from_("alpine:latest").terminal(cmd=["ls"])
+                #.with_service_binding("database",db)\
+                #.with_service_binding("app",app)\
+                
