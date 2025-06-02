@@ -22,7 +22,7 @@ class DaggerCicd:
                 .with_env_variable("POSTGRES_PASSWORD", "password")\
                 .with_exposed_port(5432)\
                 .with_mounted_file("/docker-entrypoint-initdb.d/init.sql", source_sql)\
-                .as_service(use_entrypoint=True)
+                .as_service()
 
     @function
     async def run(self, source: dagger.Directory, source_sql: dagger.File) -> str:
