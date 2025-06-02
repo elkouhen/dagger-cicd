@@ -13,16 +13,15 @@ class DaggerCicd:
                 .with_workdir("/src")\
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
 
-    @function
-    def start_db_2(self, source: dagger.Directory) -> dagger.Container:
 
-        return dag.container()\
-                .from_("postgres:17.5-alpine")\
-                .with_env_variable("POSTGRES_USER", "postgres")\
-                .with_env_variable("POSTGRES_PASSWORD", "password")\
-                .with_exposed_port(5432)\
-                .with_mounted_file("/docker-entrypoint-initdb.d/init.sql", dagger.Directory.file(source, "init.sql"))
-                
+    @function
+    def build_image(self, source: dagger.Directory) -> dagger.Container:
+
+        return dag.container().from_("maven:latest")\
+                .with_mounted_directory("/src", source)\
+                .with_workdir("/src")\
+                .with_exec(["mvn", "spring-boot:build-image"])
+                                
     def start_db(self, source: dagger.Directory) -> dagger.Service:
 
         return dag.container()\
