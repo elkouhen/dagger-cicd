@@ -25,12 +25,12 @@ class DaggerCicd:
                 .as_service(use_entrypoint=True)
 
     @function
-    async def run(self, source_code: dagger.Directory, source_sql: dagger.File) -> str:
+    async def run(self, source: dagger.Directory, source_sql: dagger.File) -> str:
 
         db_service : dagger.Service = self.start_db(source_sql)
 
         return await (dag.container().from_("maven:latest")\
-                .with_mounted_directory("/src", source_code)\
+                .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
                 .with_service_binding("database", db_service)\
                 .with_exposed_port(8080)\
