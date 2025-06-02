@@ -3,7 +3,7 @@ from dagger import dag, function, object_type
 
 
 @object_type
-class Demo:
+class DaggerCicd:
 
     @function
     def build(self, source: dagger.Directory) -> dagger.Container:
