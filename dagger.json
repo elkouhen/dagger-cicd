@@ -1,8 +1,0 @@
-{
-  "name": "demo",
-  "engineVersion": "v0.18.8",
-  "sdk": {
-    "source": "python"
-  },
-  "source": ".dagger"
-}
