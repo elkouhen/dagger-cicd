@@ -4,5 +4,12 @@
   "sdk": {
     "source": "python"
   },
+  "dependencies": [
+    {
+      "name": "docker",
+      "source": "github.com/purpleclay/daggerverse/docker@docker/v0.6.0",
+      "pin": "2a439e2b327ff561bea05a4edddd5276ac42407f"
+    }
+  ],
   "source": ".dagger"
 }

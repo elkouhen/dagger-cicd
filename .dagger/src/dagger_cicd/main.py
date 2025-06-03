@@ -13,12 +13,9 @@ class DaggerCicd:
                 .with_workdir("/src")\
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
     @function
-    def build_image(self, source: dagger.Directory) -> dagger.Container:
+    def build_image(self, source: dagger.Directory) -> dagger.DockerBuild:
 
-        return dag.container().from_("docker:latest")\
-                .with_mounted_directory("/src", source)\
-                .with_workdir("/src")\
-                .with_exec(["docker", "build", "-t", "ttl.sh/dagger-demo", "."])
+        return dag.docker().build()
                 
     def start_db(self, source: dagger.Directory) -> dagger.Service:
 
