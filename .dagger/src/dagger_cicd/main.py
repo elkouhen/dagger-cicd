@@ -6,7 +6,7 @@ from dagger import dag, function, object_type
 class DaggerCicd:
 
     @function
-    async def build(self, source: dagger.Directory) -> dagger.Container:
+    async def build(self, source: dagger.Directory) -> str:
 
         builder = dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
@@ -14,7 +14,7 @@ class DaggerCicd:
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
                 
                 # build using Dockerfile and publish to registry
-        ref = dag.container().build(context=builder).publish("ttl.sh/dagger-demo")
+        ref = (dag.container().build(context=builder).publish("ttl.sh/dagger-demo"))
 
         return await ref
      
