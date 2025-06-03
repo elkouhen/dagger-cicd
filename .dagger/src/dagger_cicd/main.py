@@ -11,10 +11,15 @@ class DaggerCicd:
         return dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
-                .with_exec(["mvn", "clean", "install", "-DskipTests"])\
-                .with_exec(["docker", "build", "-t", "ttl.sh/dagger-demo", "."])
+                .with_exec(["mvn", "clean", "install", "-DskipTests"])
+    @function
+    def build_image(self, source: dagger.Directory) -> dagger.Container:
 
-                                
+        return dag.container().from_("maven:latest")\
+                .with_mounted_directory("/src", source)\
+                .with_workdir("/src")\
+                .with_exec(["docker", "build", "-t", "ttl.sh/dagger-demo", "."])
+                
     def start_db(self, source: dagger.Directory) -> dagger.Service:
 
         return dag.container()\
