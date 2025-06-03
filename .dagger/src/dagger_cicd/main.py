@@ -13,7 +13,10 @@ class DaggerCicd:
                 .with_workdir("/src")\
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
                 
-        return await (dag.docker().with_directory("/src",builder.directory("/src")).build(source).publish("ttl.sh/dagger-demo:latest"))
+                # build using Dockerfile and publish to registry
+        ref = dag.container().build(context=builder).publish("ttl.sh/dagger-demo")
+
+        return await ref
      
                 
     def start_db(self, source: dagger.Directory) -> dagger.Service:
