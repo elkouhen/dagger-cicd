@@ -15,7 +15,7 @@ class DaggerCicd:
     @function
     def build_image(self, source: dagger.Directory) -> dagger.Container:
 
-        return dag.container().from_("maven:latest")\
+        return dag.container().from_("docker:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
                 .with_exec(["docker", "build", "-t", "ttl.sh/dagger-demo", "."])
