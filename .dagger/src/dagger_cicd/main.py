@@ -15,7 +15,7 @@ class DaggerCicd:
     @function
     def build_image(self, source: dagger.Directory) -> dagger.DockerBuild:
 
-        return dag.docker().build()
+        return dag.docker().build(source)
                 
     def start_db(self, source: dagger.Directory) -> dagger.Service:
 
