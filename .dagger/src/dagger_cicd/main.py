@@ -6,18 +6,15 @@ from dagger import dag, function, object_type
 class DaggerCicd:
 
     @function
-    def build(self, source: dagger.Directory) -> dagger.Container:
+    async def build(self, source: dagger.Directory) -> dagger.Container:
 
-        return dag.container().from_("maven:latest")\
+        builder = dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
-    @function
-    async def build_image(self, source: dagger.Directory) -> str:
-        
-        dag.container().from_("alpine:latest").with_mounted_directory("/src", source).with_exec(["ls", "-la", "/src"])
-
-        return await (dag.docker().build(source).publish("ttl.sh/dagger-demo:latest"))
+                
+        return await (dag.docker().with_directory("/src",builder.directory("/src")).build(source).publish("ttl.sh/dagger-demo:latest"))
+     
                 
     def start_db(self, source: dagger.Directory) -> dagger.Service:
 
