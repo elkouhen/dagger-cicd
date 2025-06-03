@@ -14,6 +14,8 @@ class DaggerCicd:
                 .with_exec(["mvn", "clean", "install", "-DskipTests"])
     @function
     async def build_image(self, source: dagger.Directory) -> str:
+        
+        dag.container().from_("alpine:latest").with_mounted_directory("/src", source).with_exec(["ls", "-la", "/src"])
 
         return await (dag.docker().build(source).publish("ttl.sh/dagger-demo:latest"))
                 
