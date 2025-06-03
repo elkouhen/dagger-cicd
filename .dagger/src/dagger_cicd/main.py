@@ -8,10 +8,11 @@ class DaggerCicd:
     @function
     async def build(self, source: dagger.Directory) -> str:
 
-        builder = dag.container().from_("maven:latest")\
+        builder = ( dag.container().from_("maven:latest")\
                 .with_mounted_directory("/src", source)\
                 .with_workdir("/src")\
-                .with_exec(["mvn", "clean", "install", "-DskipTests"])
+                .with_exec(["mvn", "clean", "install", "-DskipTests"])\
+                .directory("/src"))
                 
                 # build using Dockerfile and publish to registry
         ref = (dag.container().build(context=builder).publish("ttl.sh/dagger-demo"))
